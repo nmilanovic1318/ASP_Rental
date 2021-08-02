@@ -1,0 +1,69 @@
+﻿@model IEnumerable<RVAS_Bicikle.Models.Repair>
+@{
+    ViewBag.Title = "Repairs";
+}
+
+<h2>Repairs</h2>
+
+@if (!Model.Any())
+{
+    <p>We don't have any repairs!</p>
+}
+else
+{
+    <table id="repairs" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Bicycle frame
+                </th>
+                <th>
+                    Bicycle brand
+                </th>
+                <th>
+                    Bicycle model
+                </th>
+                <th>
+                    Servicing price
+                </th>
+                <th>
+                    Date of service
+                </th>
+                <th>
+                    More details
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var repair in Model)
+            {
+                <tr>
+                    <td>@repair.Bicycle.Frame</td>
+                    <td>@repair.Bicycle.Brand.Name</td>
+                    <td>@repair.Bicycle.Model</td>
+                    <td>@repair.Price</td>
+                    <td>@repair.DateOfRepair</td>
+                    <td>@Html.ActionLink("Details", "Details", "Repairs", new { id = repair.Id }, null)</td>
+
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+
+}
+@section scripts{
+    <script>
+
+
+
+        $(document).ready(function () {
+            $("#repairs").DataTable();
+
+        });
+
+    </script>
+}

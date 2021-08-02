@@ -1,0 +1,42 @@
+﻿@model RVAS_Bicikle.ViewModels.RepairFormViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create Service</h2>
+
+@using (Html.BeginForm("Store", "Repairs", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+
+        @Html.LabelFor(r => r.Repair.BicycleId)
+        @Html.DropDownListFor(b => b.Repair.BicycleId, new SelectList(Model.Bicycles, "Id", "Model", Model.Repair.BicycleId), "Select bicycle model", new { @class = "form-control" })
+        @Html.ValidationMessageFor(b => b.Repair.BicycleId)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(r => r.Repair.DateOfRepair)
+        @Html.TextBoxFor(r => r.Repair.DateOfRepair, new { @control = "form-control" })
+        @Html.ValidationMessageFor(r => r.Repair.DateOfRepair)
+
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(r => r.Repair.Price)
+        @Html.TextBoxFor(r => r.Repair.Price, new { @control = "form-control" })
+        @Html.ValidationMessageFor(r => r.Repair.Price)
+    </div>
+
+    @Html.HiddenFor(b => b.Repair.Id)
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+
+}
+
+@section scripts{
+    
+    @Scripts.Render("~/bundles/jqueryval")
+}

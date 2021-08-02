@@ -1,0 +1,53 @@
+﻿@model RVAS_Bicikle.Models.Bicycle
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+
+<dl>
+    <dt>
+        Bycicle ID:
+    </dt>
+    <dd>
+        @Model.Id
+    </dd>
+    <dt>
+        Brand:
+    </dt>
+    <dd>
+        @Model.Brand.Name
+    </dd>
+    <dt>
+        Model:
+    </dt>
+    <dd>
+        @Model.Model
+    </dd>
+    <dt>
+        Price:
+    </dt>
+    <dd>
+        @Model.Price
+    </dd>
+    <dt>
+        Framing:
+    </dt>
+    <dd>
+        @Model.Frame
+    </dd>
+    <dt>
+        Weight:
+    </dt>
+    <dd>
+        @Model.Weight
+    </dd>
+    <dt>
+        Training wheels:
+    </dt>
+    <dd>
+        @Model.TrainingWheels
+    </dd>
+</dl>
+

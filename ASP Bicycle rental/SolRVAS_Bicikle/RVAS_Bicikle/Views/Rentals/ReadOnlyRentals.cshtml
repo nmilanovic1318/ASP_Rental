@@ -1,0 +1,66 @@
+﻿@model IEnumerable<RVAS_Bicikle.Models.Rental>
+@{
+    ViewBag.Title = "Rentals";
+}
+
+<h2>Rentals</h2>
+
+@if (!Model.Any())
+{
+    <p>We don't have any rentals yet!</p>
+
+}
+else
+{
+    <table id="rentals" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Rented by
+                </th>
+                <th>
+                    Bicycle brand
+                </th>
+                <th>
+                    Bicycle model
+                </th>
+                <th>
+                    Date rented
+                </th>
+                <th>
+                    Date returned
+                </th>
+                <th>
+                    Details
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var rental in Model)
+            {
+                <tr>
+                    <td>@rental.Customer.FullName</td>
+                    <td>@rental.Bicycle.Brand.Name</td>
+                    <td>@rental.Bicycle.Model</td>
+                    <td>@rental.DateRented</td>
+                    <td>@rental.DateReturned</td>
+                    <td>@Html.ActionLink("Details", "Details", "Rentals", new { id = rental.Id }, null)</td>
+                </tr>
+
+            }
+        </tbody>
+    </table>
+}
+@section scripts{
+    <script>
+
+
+
+        $(document).ready(function () {
+            $("#rentals").DataTable();
+
+        });
+
+    </script>
+}

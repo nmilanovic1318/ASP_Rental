@@ -1,0 +1,175 @@
+﻿@model RVAS_Bicikle.Models.Customer
+@{
+    ViewBag.Title = "Add customer";
+}
+
+<h2>Add customer</h2>
+
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new { id = "createCustomerForm" }))
+{
+
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+
+        @Html.LabelFor(m => m.Name)
+        @Html.TextBoxFor(m => m.Name, new { @class = "form-control", id = "name" })
+        @Html.ValidationMessageFor(m => m.Name)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(m => m.Surname)
+        @Html.TextBoxFor(m => m.Surname, new { @control = "form-control", id = "surname" })
+        @Html.ValidationMessageFor(m => m.Surname)
+
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Age)
+        @Html.TextBoxFor(m => m.Age, new { @control = "form-control", id = "age" })
+        @Html.ValidationMessageFor(m => m.Age)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.PhoneNumber)
+        @Html.TextBoxFor(m => m.PhoneNumber, new { @control = "form-control", id = "phoneNumber" })
+        @Html.ValidationMessageFor(m => m.PhoneNumber)
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(m => m.Address)
+        @Html.TextBoxFor(m => m.Address, new { @control = "form-control", id = "address" })
+        @Html.ValidationMessageFor(m => m.Address)
+    </div>
+
+
+
+    @Html.HiddenFor(m => m.Id)
+
+    //Ako je Model.Id jednak nuli, mušterija ne postoji pa printujemo dugme koje će pozvati Create metodu API-ja preko skripte ispod
+
+    if (Model.Id == 0)
+    {
+        <button type="button" class="btn btn-primary btnsubmit" customer-data-id="@Model.Id" customer-data="@Model">Save</button>
+    }
+
+    // U suprotnom, printujemo Edit dugme koje će pozvati Edit metodu API-ja preko skripte
+    else
+    {
+        <button type="button" class="btn btn-primary btnedit" customer-data-id="@Model.Id" customer-data="@Model">Save</button>
+    }
+
+
+
+}
+
+@section scripts{
+
+    @*Klijentska validacija*@
+    @Scripts.Render("~/bundles/jqueryval")
+
+    @*Skripta za poziv API-ja*@
+
+    <script>
+        $(document).ready(function () {
+            $("#createCustomerForm").on("click", ".btnsubmit", function () {
+                var button = $(this);
+
+                /*Svakom polju u formi je iznad(u C# kodu) dodeljen neki ID; preko tog ID-ja sada u varove store-ujemo vrednosti*/
+
+                var customerName = $('#name').val();
+                var customerSurname = $('#surname').val();
+                var customerAge = $('#age').val();
+                var customerPhoneNumber = $('#phoneNumber').val();
+                var customerAddress = $('#address').val();
+
+                /*Pravimo objekat koji sadrži podatke koje smo izvukli iz forme, formatiramo ga kao JSON*/
+
+                var data = {
+                    "name": customerName,
+                    "surname": customerSurname,
+                    "age": customerAge,
+                    "phoneNumber": customerPhoneNumber,
+                    "address": customerAddress
+                };
+
+                /*Koristimo JSON.stringify da bi se propisno formatirali podaci*/
+                var JSONData = JSON.stringify(data);
+
+                //Preko AJAX - a šaljemo POST zahtev na rutu / api / customers, čime kreiramo novog korisnika; u data
+                //sekciji prosleđujemo podatke koje smo upravo iznad formatirali
+
+                $.ajax({
+                    url: '../api/customers',
+                    type: "POST",
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSONData,
+                    //dataType: 'application/json',
+
+                    success: function (data) {
+                        bootbox.alert("Successfully created customer!");
+                    },
+                    error: function (data) {
+                        var msg = jqXHR.responseText + jqXHR.status;
+
+                        $('#createCustomerForm').html(msg);
+                    }
+
+                });
+
+
+            });
+        });
+
+    </script>
+
+
+    @*Ovde je ista priča kao iznad, samo ćemo slati PUT request umesto POST-a, što će pokrenuti Update metodu*@
+
+    <script>
+        $(document).ready(function () {
+            $("#createCustomerForm").on("click", ".btnedit", function () {
+                var button = $(this);
+
+                var customerId = button.attr("customer-data-id");
+                var customerName = $('#name').val();
+                var customerSurname = $('#surname').val();
+                var customerAge = $('#age').val();
+                var customerPhoneNumber = $('#phoneNumber').val();
+                var customerAddress = $('#address').val();
+                var data = {
+                    "id": customerId,
+                    "name": customerName,
+                    "surname": customerSurname,
+                    "age": customerAge,
+                    "phoneNumber": customerPhoneNumber,
+                    "address": customerAddress
+                };
+                var JSONData = JSON.stringify(data);
+                $.ajax({
+                    url: '../../api/customers' + "/" + customerId,
+                    type: "PUT",
+                    // dataType: 'application/json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSONData,
+                    success: function (data) {
+                        bootbox.alert("Successfully edited customer's data!");
+                    },
+                    error: function (jqXHR, exception) {
+                        var msg = jqXHR.responseText + jqXHR.status;
+
+                        $('#createCustomerForm').html(msg);
+                    },
+                });
+
+
+
+
+
+            });
+        });
+
+    </script>
+
+
+}

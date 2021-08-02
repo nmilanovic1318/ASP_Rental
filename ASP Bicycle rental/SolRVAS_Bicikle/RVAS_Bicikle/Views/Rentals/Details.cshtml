@@ -1,0 +1,35 @@
+﻿@model RVAS_Bicikle.Models.Rental
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<dl>
+    <dt>
+        Date rented:
+    </dt>
+    <dd>
+        @Model.DateRented
+    </dd>
+    <dt>
+        Date returned:
+    </dt>
+    <dd>
+        @Model.DateReturned
+    </dd>
+    <dt>
+        Bicycle model:
+    </dt>
+    <dd>
+        @Model.Bicycle.Model
+    </dd>
+    <dt>
+        Rented by:
+    </dt>
+    <dd>
+        @Model.Customer.FullName
+    </dd>
+   
+  
+</dl>

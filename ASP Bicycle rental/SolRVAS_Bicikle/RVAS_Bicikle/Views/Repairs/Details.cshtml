@@ -1,0 +1,39 @@
+﻿@model RVAS_Bicikle.Models.Repair
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<dl>
+    <dt>
+        Repair ID:
+    </dt>
+    <dd>
+        @Model.Id
+    </dd>
+    <dt>
+        Bicycle brand and model:
+    </dt>
+    <dd>
+        @Model.Bicycle.Brand.Name @Model.Bicycle.Model
+    </dd>
+    <dt>
+        Bicycle framing:
+    </dt>
+    <dd>
+        @Model.Bicycle.Frame
+    </dd>
+    <dt>
+        Repair price:
+    </dt>
+    <dd>
+        @Model.Price
+    </dd>
+    <dt>
+        Date of repair:
+    </dt>
+    <dd>
+        @Model.DateOfRepair
+    </dd>
+</dl>

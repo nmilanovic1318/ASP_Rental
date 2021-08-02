@@ -1,0 +1,36 @@
+﻿@model RVAS_Bicikle.ViewModels.RentalFormViewModel
+@{
+    ViewBag.Title = "Create";
+}
+
+<h2>Create</h2>
+
+@using (Html.BeginForm("Store", "Rentals", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+
+        @Html.LabelFor(r => r.Rental.BicycleId)
+        @Html.DropDownListFor(r => r.Rental.BicycleId, new SelectList(Model.Bicycles, "Id", "Model", Model.Rental.BicycleId), "Select bicycle model", new { @class = "form-control" })
+        @Html.ValidationMessageFor(r => r.Rental.BicycleId)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(r => r.Rental.CustomerId)
+        @Html.DropDownListFor(r => r.Rental.CustomerId, new SelectList(Model.Customers, "Id", "FullName", Model.Rental.CustomerId), "Select customer name", new { @class = "form-control" })
+        @Html.ValidationMessageFor(r => r.Rental.BicycleId)
+    </div>
+    
+
+
+    @Html.HiddenFor(r => r.Rental.Id)
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+
+}
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

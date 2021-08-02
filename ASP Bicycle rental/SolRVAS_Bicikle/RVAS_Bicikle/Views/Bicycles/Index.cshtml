@@ -1,0 +1,139 @@
+﻿@model IPagedList<RVAS_Bicikle.Models.Bicycle>
+@{
+    ViewBag.Title = "All bicycles";
+}
+@using PagedList;
+@using PagedList.Mvc;
+<h2>All bicycles</h2>
+
+<p>@Html.ActionLink("Create new", "Create", "Bicycles", null)</p>
+
+<p>
+
+    @*Prikaz kontrola za odabir termina za pretragu, i onoga preko čega se sortiraju podaci*@
+
+    @using (Html.BeginForm("Index", "Bicycles", FormMethod.Get))
+    {
+        <b>Search By:</b> @Html.RadioButton("searchBy", "All", true) <text>All</text> @Html.RadioButton("searchBy", "Model") <text>Model</text> @Html.RadioButton("searchBy", "Brand") <text>Brand name</text>
+        @Html.TextBox("search")
+
+        <b>Order by: </b> @Html.RadioButton("orderBy", "Model", true) <text>Model</text> @Html.RadioButton("orderBy", "Brand") <text>Brand name</text>
+        <input type="submit" value="Search" />
+
+
+    }
+
+</p>
+
+<table id="bicycles" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Bicycle brand
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Price ($)
+            </th>
+            <th>
+                Frame
+            </th>
+            <th>
+                Weight (Kg)
+            </th>
+            <th>
+                Training wheels
+            </th>
+
+
+            <th class="text-center">
+                Rented by
+            </th>
+            <th class="text-center">
+                Rented on
+            </th>
+            <th>
+                CRUD operations
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="9">No rows have been found</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var bicycle in Model)
+            {
+                <tr>
+                    <td>@bicycle.Brand.Name</td>
+                    <td>@bicycle.Model</td>
+                    <td>@bicycle.Price</td>
+                    <td>@bicycle.Frame</td>
+                    <td>@bicycle.Weight</td>
+                    <td>@(bicycle.TrainingWheels? "Yes" : "No")</td>
+                    <td>
+                        @foreach (var rental in bicycle.Rentals)
+                        {
+
+                            @rental.Customer.FullName<text>, </text>
+
+                        }
+                    </td>
+                    <td>
+                        @foreach (var rental in bicycle.Rentals)
+                        {
+
+                            @rental.DateRented<text>, </text>
+
+                        }
+                    </td>
+
+                    <td>@Html.ActionLink("Details", "Details", "Bicycles", new { id = bicycle.Id }, null) | <button data-bicycle-id="@bicycle.Id" class="btn-link jquery-delete">Delete</button> | @Html.ActionLink("Edit", "Edit", "Bicycles", new { id = bicycle.Id }, null)</td>
+
+                </tr>
+            }
+
+
+        }
+    </tbody>
+</table>
+
+
+@*Prikaz podataka vezanih za paginaciju (prikazana strana, broj strana, broj zapisa), takođe prenos parametara na narednu stranicu ukoliko postoji search termin*@
+
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], orderBy = Request.QueryString["orderBy"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+
+
+@*jQuery skripta korišćena za prikaz konfirmacije pre brisanja objekta iz tabele - iskače pop up, samo ako se potvrdi preko njega
+    se briše objekat*@
+
+@section scripts{
+    <script>
+
+
+        $(document).ready(function () {
+            $("#bicycles").on("click", ".jquery-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this bicycle?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/bicycles/deletebicycle/" + button.attr("data-bicycle-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+
+    </script>
+}

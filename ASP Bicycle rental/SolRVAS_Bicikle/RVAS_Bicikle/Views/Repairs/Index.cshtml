@@ -1,0 +1,82 @@
+﻿@model IEnumerable<RVAS_Bicikle.Models.Repair>
+@{
+    ViewBag.Title = "Services";
+}
+
+<h2>Repairs</h2>
+
+@if (!Model.Any())
+{
+    <p>We don't have any repairs!</p>
+    @Html.ActionLink("Add repair", "Create", "Repairs", null)
+}
+else
+{
+    @Html.ActionLink("Add repair", "Create", "Repairs", null)
+    <table id="repairs" class="table table-bordered table-hover">
+        <thead>
+            <tr>
+                <th>
+                    Bicycle frame
+                </th>
+                <th>
+                    Bicycle brand
+                </th>
+                <th>
+                    Bicycle model
+                </th>
+                <th>
+                    Servicing price
+                </th>
+                <th>
+                    Date of service
+                </th>
+                <th>
+                    CRUD operations
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var repair in Model)
+            {
+                <tr>
+                    <td>@repair.Bicycle.Frame</td>
+                    <td>@repair.Bicycle.Brand.Name</td>
+                    <td>@repair.Bicycle.Model</td>
+                    <td>@repair.Price</td>
+                    <td>@repair.DateOfRepair</td>
+
+                    <td>@Html.ActionLink("Details", "Details", "Repairs", new { id = repair.Id }, null) |<button data-repair-id="@repair.Id" class="btn-link jquery-delete">Delete</button> | @Html.ActionLink("Edit", "Edit", "Repairs", new { id = repair.Id }, null)</td>
+
+                </tr>
+
+            }
+        </tbody>
+    </table>
+
+
+}
+@section scripts{
+    <script>
+
+        $(document).ready(function () {
+            $("#repairs").DataTable();
+            $("#repairs").on("click", ".jquery-delete", function () {
+                var button = $(this);
+                bootbox.confirm("Are you sure you want to delete this repair?", function (result) {
+                    if (result) {
+                        $.ajax({
+                            url: "/repairs/deleterepair/" + button.attr("data-repair-id"),
+                            method: "DELETE",
+                            success: function () {
+                                button.parents("tr").remove();
+                            }
+                        });
+                    }
+                });
+
+            });
+        });
+
+    </script>
+}

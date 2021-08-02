@@ -1,0 +1,66 @@
+﻿@model RVAS_Bicikle.ViewModels.BicycleFormViewModel
+@{
+    ViewBag.Title = "Create Bycicle";
+}
+
+<h2>Create Bicycle</h2>
+
+@using (Html.BeginForm("Store", "Bicycles", FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-group">
+        @Html.LabelFor(b => b.Bicycle.Frame)
+        @Html.TextBoxFor(b => b.Bicycle.Frame, new { @class = "form-control" })
+        @Html.ValidationMessageFor(b => b.Bicycle.Frame)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(b => b.Bicycle.BrandId)
+        @Html.DropDownListFor(b => b.Bicycle.BrandId, new SelectList(Model.Brands, "Id", "Name", Model.Bicycle.BrandId), "Select bicycle brand", new { @class = "form-control" })
+        @Html.ValidationMessageFor(b => b.Bicycle.BrandId)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(b => b.Bicycle.Model)
+        @Html.TextBoxFor(b => b.Bicycle.Model, new { @control = "form-control" })
+        @Html.ValidationMessageFor(b => b.Bicycle.Model)
+
+
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(b => b.Bicycle.Price)
+        @Html.TextBoxFor(b => b.Bicycle.Price, new { @control = "form-control" })
+        @Html.ValidationMessageFor(b => b.Bicycle.Price)
+    </div>
+    <div class="form-group">
+
+        @Html.LabelFor(b => b.Bicycle.Weight)
+        @Html.TextBoxFor(b => b.Bicycle.Weight, new { @control = "form-control" })
+        @Html.ValidationMessageFor(b => b.Bicycle.Weight)
+
+
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(b => b.Bicycle.TrainingWheels)
+        @Html.CheckBoxFor(b => b.Bicycle.TrainingWheels, new { @control = "form-control" })
+
+        @Html.ValidationMessageFor(b => b.Bicycle.TrainingWheels)
+    </div>
+
+
+
+    @Html.HiddenFor(b => b.Bicycle.Id)
+
+    <button type="submit" class="btn btn-primary">Save</button>
+
+
+}
+
+
+@*Klijentska validacija ispod*@
+
+@section scripts{
+    @Scripts.Render("~/bundles/jqueryval")
+}

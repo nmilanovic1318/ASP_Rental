@@ -1,0 +1,71 @@
+﻿@model IPagedList<RVAS_Bicikle.Models.Bicycle>
+@{
+    ViewBag.Title = "Index";
+}
+@using PagedList;
+@using PagedList.Mvc;
+
+<h2>Index</h2>
+
+<p>
+    @using (Html.BeginForm("Index", "Bicycles", FormMethod.Get))
+    {
+        <b>Search By:</b> @Html.RadioButton("searchBy", "All", true) <text>All</text> @Html.RadioButton("searchBy", "Model") <text>Model</text> @Html.RadioButton("searchBy", "Brand") <text>Brand name</text>
+        @Html.TextBox("search")
+        <b>Order by: </b> @Html.RadioButton("orderBy", "Model", true) <text>Model</text> @Html.RadioButton("orderBy", "Brand") <text>Brand name</text>
+        <input type="submit" value="Search" />
+    }
+
+</p>
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                Bicycle brand
+            </th>
+            <th>
+                Model
+            </th>
+            <th>
+                Price ($)
+            </th>
+            <th>
+                Framing
+            </th>
+            <th>
+                Weight (Kg)
+            </th>
+            <th>
+                Training wheels
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (!Model.Any())
+        {
+            <tr>
+                <td colspan="9">No rows have been found</td>
+            </tr>
+        }
+        else
+        {
+            foreach (var bicycle in Model)
+            {
+                <tr>
+                    <td>@bicycle.Brand.Name</td>
+                    <td>@bicycle.Model</td>
+                    <td>@bicycle.Price</td>
+                    <td>@bicycle.Frame</td>
+                    <td>@bicycle.Weight</td>
+                    <td>@(bicycle.TrainingWheels? "Yes" : "No")</td>
+
+                </tr>
+            }
+
+
+        }
+    </tbody>
+</table>
+@Html.PagedListPager(Model, page => Url.Action("Index", new { page, searchBy = Request.QueryString["searchBy"], search = Request.QueryString["search"], orderBy = Request.QueryString["orderBy"] }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true })
+
+

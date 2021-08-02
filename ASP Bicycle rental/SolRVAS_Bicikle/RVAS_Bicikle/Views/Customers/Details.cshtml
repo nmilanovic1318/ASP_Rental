@@ -1,0 +1,72 @@
+﻿@model RVAS_Bicikle.Models.Customer
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<dl>
+    <dt>
+        Name:
+    </dt>
+    <dd>
+        @Model.Name
+    </dd>
+    <dt>
+        Surname:
+    </dt>
+    <dd>
+        @Model.Surname
+    </dd>
+    <dt>
+        Age:
+    </dt>
+    <dd>
+        @Model.Age
+    </dd>
+    <dt>
+        Phone number:
+    </dt>
+    <dd>
+        @Model.PhoneNumber
+    </dd>
+    <dt>
+        Address:
+    </dt>
+    <dd>
+        @Model.Address
+    </dd>
+    <dt>
+        Rentals:
+    </dt>
+
+    @if (!Model.Rentals.Any())
+    {
+        <dd>
+            This customer has no current rentals.
+        </dd>
+    }
+    else
+    {
+        foreach (var rental in Model.Rentals)
+        {
+            <dd>
+                Bicycle model: @rental.Bicycle.Model
+            </dd>
+            <dd>
+                Date rented: @rental.DateRented
+            </dd>
+            <dd>
+                Date returned: @rental.DateReturned
+            </dd>
+
+
+
+
+
+        }
+    }
+
+
+
+</dl>
